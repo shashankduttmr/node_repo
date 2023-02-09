@@ -44,3 +44,29 @@ module.exports.CommentAdd = async function (req, res, next) {
         next(new AppError('Something went wrong', 500))
     }
 }
+
+module.exports.DeleteComment = async function(req, res, next){
+    try {
+        const {id, commentid} = req.params
+        if(!id){
+            next(new AppError('Failed to delete comment', 404))
+        }else{
+            const data = await Post.findById(id)
+            if(!data){
+                next(new AppError('Failed to delete comment', 404))
+            }else{
+                const cmt = await Comment.findById(commentid)
+                if(!cmt){
+                    next(new AppError('Failed to delete comment', 404))
+                }else{
+                    await Comment.findByIdAndDelete(commentid)
+                    await Post.findByIdAndUpdate(id, {$pull:{comments:commentid}})
+                    req.flash('success', 'You have deleted a comment')
+                    res.redirect(`/post/v1/?id=${id}`)
+                }
+            }
+        }
+    } catch (error) {
+        next(new AppError('Failed to delete comment', 500))
+    }
+}

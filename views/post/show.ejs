@@ -112,7 +112,7 @@
                                     </h6>
                                     <p class="card-text">Review: <%= data.comments[x].body %>
                                     </p>
-                                    <% if((currentUser && data.comments[x].author.equals(currentUser._id)) || currentUser
+                                    <% if((currentUser && data.comments[x].author.equals(currentUser)) || currentUser
                                         && data.author.equals(currentUser)){ %>
                                         <form
                                             action="/post/<%= data._id %>/comment/<%= data.comments[x]._id %>/delete?_method=DELETE"
